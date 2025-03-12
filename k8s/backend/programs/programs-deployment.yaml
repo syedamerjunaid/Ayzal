@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: programs-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: programs
+  template:
+    metadata:
+      labels:
+        app: programs
+    spec:
+      containers:
+      - name: programs
+        image: your-registry/programs:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: production
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: programs-service
+spec:
+  selector:
+    app: programs
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000

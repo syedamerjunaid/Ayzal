@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mentorship-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mentorship
+  template:
+    metadata:
+      labels:
+        app: mentorship
+    spec:
+      containers:
+      - name: mentorship
+        image: your-registry/mentorship:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: production
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mentorship-service
+spec:
+  selector:
+    app: mentorship
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000

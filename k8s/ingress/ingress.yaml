@@ -1,0 +1,83 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ayzal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      # Frontend
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+      
+      # Backend Services
+      - path: /api/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 3000
+      - path: /api/community
+        pathType: Prefix
+        backend:
+          service:
+            name: community-service
+            port:
+              number: 3000
+      - path: /api/forum
+        pathType: Prefix
+        backend:
+          service:
+            name: forum-service
+            port:
+              number: 3000
+      - path: /api/kubernetes
+        pathType: Prefix
+        backend:
+          service:
+            name: kubernetes-service
+            port:
+              number: 3000
+      - path: /api/library
+        pathType: Prefix
+        backend:
+          service:
+            name: library-service
+            port:
+              number: 3000
+      - path: /api/mentorship
+        pathType: Prefix
+        backend:
+          service:
+            name: mentorship-service
+            port:
+              number: 3000
+      - path: /api/payment
+        pathType: Prefix
+        backend:
+          service:
+            name: payment-service
+            port:
+              number: 3000
+      - path: /api/programs
+        pathType: Prefix
+        backend:
+          service:
+            name: programs-service
+            port:
+              number: 3000
+      - path: /api/training
+        pathType: Prefix
+        backend:
+          service:
+            name: training-service
+            port:
+              number: 3000
