@@ -1,24 +1,18 @@
-# Use Node.js LTS
 FROM node:18-alpine
 
-# Install security-related dependencies
-RUN apk add --no-cache openssl
+# Security & SSL dependencies
+RUN apk add --no-cache \
+    openssl \
+    libressl-dev \
+    && openssl genrsa -out /tmp/private.pem 2048 \
+    && openssl rsa -in /tmp/private.pem -pubout -out /tmp/public.pem
 
-# Set working directory
 WORKDIR /app
-
-# Copy package files for dependency installation
 COPY package*.json ./
-  
-# Install production dependencies
-RUN npm install --only=production
-
-# Copy source code
+RUN npm install -g jsonlint && \
+    jsonlint -q package.json && \
+    npm ci --omit=dev
 COPY . .
 
-# Generate SSL keys (if needed)
-RUN openssl genrsa -out ./config/private.key 2048 && \
-    openssl rsa -in ./config/private.key -pubout -out ./config/public.key
-
 EXPOSE 3000
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main.js"]

@@ -1,14 +1,15 @@
 FROM node:18-alpine
 
-# Install file processing tools
+# Media processing stack
 RUN apk add --no-cache \
-    poppler-utils \   # PDF processing
-    ffmpeg \          # Video processing
-    imagemagick       # Image processing
+    ffmpeg \
+    imagemagick \
+    poppler-utils \
+    ghostscript
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm ci --omit=dev
 COPY . .
 
 EXPOSE 3000

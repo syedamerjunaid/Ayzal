@@ -1,5 +1,5 @@
 #!/bin/bash
-DOCKER_USER="syedamerjunaid"
+DOCKER_USER="aamerjunaid"
 APP_NAME="ayzal"
 
 # Build and push backend services

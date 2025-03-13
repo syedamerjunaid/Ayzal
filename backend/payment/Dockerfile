@@ -1,12 +1,14 @@
 FROM node:18-alpine
 
-# Install SSL tools for secure communication
-RUN apk add --no-cache ca-certificates
+# PostgreSQL client libraries
+RUN apk add --no-cache \
+    postgresql-client \
+    postgresql-dev
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm ci --omit=dev
 COPY . .
 
 EXPOSE 3000
-CMD ["node", "dist/main.js"]  # For compiled TS/JS
+CMD ["node", "dist/main.js"]

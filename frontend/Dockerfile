@@ -1,14 +1,27 @@
-# Stage 1: Build the frontend
+# Stage 1: Build
 FROM node:18-alpine AS builder
+
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++
+
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
-RUN npm run build  # Replace with your framework's build command (e.g., Next.js, React)
+RUN npm run build
 
-# Stage 2: Serve the frontend
+# Stage 2: Production
 FROM nginx:alpine
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    curl \
+    tzdata
+
 COPY --from=builder /app/build /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf  # Add if you have custom NGINX config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
